@@ -1,0 +1,82 @@
+.login-page {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+    background:
+        radial-gradient(55rem 35rem at 75% -15%, rgba(255, 255, 255, 0.06), transparent 60%),
+        radial-gradient(40rem 30rem at 0% 110%, rgba(255, 255, 255, 0.035), transparent 55%),
+        #050505;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.login-page__card {
+    position: relative;
+    overflow: hidden;
+    width: min(100%, 26.5rem);
+    border-radius: 0.25rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 45%),
+        #0b0b0c;
+    padding: 2.5rem;
+}
+
+.login-page__card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(248, 113, 113, 0.55),
+            rgba(251, 191, 36, 0.55),
+            rgba(74, 222, 128, 0.55),
+            rgba(96, 165, 250, 0.55),
+            rgba(192, 132, 252, 0.55),
+            transparent);
+}
+
+.login-page__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.login-page__badge {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.04);
+
+}
+
+.login-page__card h1 {
+    margin: 0;
+    color: #fafafa;
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 4vw, 1.85rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.login-page__footer {
+    position: absolute;
+    bottom: 1.5rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.22);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+@media (max-height: 44rem) {
+    .login-page__footer {
+        display: none;
+    }
+}

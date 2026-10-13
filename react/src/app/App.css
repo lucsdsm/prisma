@@ -1,0 +1,44 @@
+.app-dashboard {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  background-color: #f8fafc;
+  padding: 1.5rem;
+}
+
+.app-dashboard__content {
+  width: min(100%, 42rem);
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0 1rem 2.5rem rgb(15 23 42 / 8%);
+  padding: 2rem;
+}
+
+.app-dashboard__eyebrow {
+  color: #15803d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-dashboard__content h1 {
+  color: #0f172a;
+}
+
+.app-dashboard__content p {
+  color: #475569;
+  line-height: 1.6;
+}
+
+.app-dashboard__content button {
+  border: 0;
+  border-radius: 0.5rem;
+  background-color: #1d4ed8;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 0.75rem;
+  padding: 0.7rem 1rem;
+}

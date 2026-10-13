@@ -1,0 +1,15 @@
+# Node / React
+react/node_modules
+react/dist
+react/build
+
+# Python / Django
+drf/__pycache__
+drf/env
+drf/venv
+drf/db.sqlite3
+
+# Docker
+*.pyc
+__pycache__/
+.env

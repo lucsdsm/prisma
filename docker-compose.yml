@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  drf:
+    build: ./drf
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    env_file: .env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./drf:/app
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+
+  react:
+    build: ./react
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    env_file: .env
+    environment:
+      VITE_API_URL: "http://localhost:8000/api"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./react/src:/usr/src/app/src
+      - ./react/public:/usr/src/app/public
+      - ./react/index.html:/usr/src/app/index.html
+      - react_node_modules:/usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - drf
+
+volumes:
+  postgres_data:
+  react_node_modules:
