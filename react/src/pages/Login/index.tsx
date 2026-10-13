@@ -1,6 +1,7 @@
-import { LoginForm } from '../../components/auth/LoginForm'
-import { PrismaLogo } from '../../components/brand/PrismaLogo'
-import './LoginPage.css'
+import { LoginForm } from '../../components/auth'
+import { PrismaLogo } from '../../components/brand'
+import { ThemeSwitch } from '../../components/theme-switch'
+import './styles.css'
 
 interface LoginPageProps {
   onLoginSuccess: () => void
@@ -9,6 +10,10 @@ interface LoginPageProps {
 export function LoginPage({ onLoginSuccess }: LoginPageProps) {
   return (
     <main className="login-page">
+      <div className="login-page__theme-switch">
+        <ThemeSwitch />
+      </div>
+
       <section className="login-page__card" aria-labelledby="login-title">
         <div className="login-page__brand">
           <span className="login-page__badge">

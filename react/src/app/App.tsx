@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { LoginPage } from '../pages/Login/LoginPage'
+import { LoginPage } from '../pages/Login'
 import { isAuthenticated, logout } from '../services/auth.service'
+import { ThemeSwitch } from '../components/theme-switch'
 import './App.css'
 
 export default function App() {
@@ -21,6 +22,10 @@ export default function App() {
 
   return (
     <main className="app-dashboard">
+      <div className="app-dashboard__theme-switch">
+        <ThemeSwitch />
+      </div>
+
       <section className="app-dashboard__content">
         <p className="app-dashboard__eyebrow">Acesso autenticado</p>
 

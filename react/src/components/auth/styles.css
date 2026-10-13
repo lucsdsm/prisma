@@ -11,7 +11,7 @@
 }
 
 .login-form__field label {
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -20,10 +20,10 @@
 .login-form__field input {
   width: 100%;
   box-sizing: border-box;
-  border: 0px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--color-border);
   border-radius: 0.25rem;
-  background-color: rgba(255, 255, 255, 0.04);
-  color: #f4f4f5;
+  background-color: var(--color-surface-muted);
+  color: var(--color-text);
   font-family: inherit;
   font-size: 0.95rem;
   outline: none;
@@ -35,13 +35,13 @@
 }
 
 .login-form__field input::placeholder {
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--color-text-subtle);
 }
 
 .login-form__field input:focus {
-  border-color: rgba(255, 255, 255, 0.38);
-  background-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  border-color: var(--color-focus);
+  background-color: var(--color-surface);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 20%, transparent);
 }
 
 .login-form__field input:disabled {
@@ -51,10 +51,10 @@
 
 .login-form__error {
   margin: 0;
-  border: 1px solid rgba(248, 113, 113, 0.28);
+  border: 1px solid var(--color-danger);
   border-radius: 0.25rem;
-  background-color: rgba(220, 38, 38, 0.12);
-  color: #fca5a5;
+  background-color: var(--color-danger-background);
+  color: var(--color-danger);
   font-size: 0.875rem;
   padding: 0.7rem 0.8rem;
 }
@@ -62,8 +62,8 @@
 .login-form__submit {
   border: 0;
   border-radius: 0.25rem;
-  background-color: #f4f4f5;
-  color: #0a0a0a;
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
   cursor: pointer;
   font-family: inherit;
   font-size: 0.95rem;
@@ -75,12 +75,12 @@
 }
 
 .login-form__submit:hover:not(:disabled) {
-  background-color: #ffffff;
+  filter: brightness(1.12);
   transform: translateY(-1px);
 }
 
 .login-form__submit:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 

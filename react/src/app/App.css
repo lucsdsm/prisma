@@ -1,16 +1,23 @@
 .app-dashboard {
+  position: relative;
   display: grid;
   min-height: 100vh;
   place-items: center;
-  background-color: #f8fafc;
+  background-color: var(--color-page-background);
   padding: 1.5rem;
+}
+
+.app-dashboard__theme-switch {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
 }
 
 .app-dashboard__content {
   width: min(100%, 42rem);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 1rem;
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   box-shadow: 0 1rem 2.5rem rgb(15 23 42 / 8%);
   padding: 2rem;
 }
@@ -24,21 +31,28 @@
 }
 
 .app-dashboard__content h1 {
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .app-dashboard__content p {
-  color: #475569;
+  color: var(--color-text-muted);
   line-height: 1.6;
 }
 
 .app-dashboard__content button {
   border: 0;
   border-radius: 0.5rem;
-  background-color: #1d4ed8;
-  color: #ffffff;
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
   cursor: pointer;
   font-weight: 700;
   margin-top: 0.75rem;
   padding: 0.7rem 1rem;
+}
+
+@media (max-width: 32rem) {
+  .app-dashboard__theme-switch {
+    top: 1rem;
+    right: 1rem;
+  }
 }

@@ -1,0 +1,80 @@
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.theme-switch:hover {
+  border-color: var(--color-focus);
+  color: var(--color-text);
+}
+
+.theme-switch:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.theme-switch__icon {
+  display: grid;
+  width: 1.2rem;
+  height: 1.2rem;
+  place-items: center;
+}
+
+.theme-switch__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.theme-transition {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  animation: theme-fade-in 0.42s ease-in forwards;
+}
+
+/* A camada fica atrás do conteúdo para manter os formulários visíveis durante o fade. */
+:root[data-theme-transitioning='true'] .login-page,
+:root[data-theme-transitioning='true'] .app-dashboard {
+  background: transparent;
+}
+
+.login-page > *,
+.app-dashboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes theme-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition {
+    animation-duration: 0.01ms;
+  }
+}

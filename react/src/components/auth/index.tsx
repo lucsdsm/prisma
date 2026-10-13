@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { login } from '../../services/auth.service'
-import './LoginForm.css'
+import './styles.css'
 
 interface LoginFormProps {
   onSuccess: () => void
