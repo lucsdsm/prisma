@@ -21,42 +21,23 @@ interface ThemeProviderProps {
 }
 
 /**
- * Expõe o estado do tema e coordena a transição visual entre as paletas.
- * As variáveis CSS ativas permanecem inalteradas até o fim do slide.
+ * Expõe o estado do tema e aplica a paleta ativa.
  */
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme)
-  const [appliedTheme, setAppliedTheme] = useState<ThemeMode>(theme)
 
   useEffect(() => {
     const root = document.documentElement
-    root.dataset.theme = appliedTheme
-    root.dataset.themeTransitioning = String(theme !== appliedTheme)
-    root.style.setProperty(
-      '--color-transition-background',
-      themeColors[theme].pageBackground,
-    )
+    root.dataset.theme = theme
 
-    Object.entries(themeColors[appliedTheme]).forEach(([name, value]) => {
+    Object.entries(themeColors[theme]).forEach(([name, value]) => {
       root.style.setProperty(`--color-${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`, value)
     })
-  }, [appliedTheme, theme])
+  }, [theme])
 
   useEffect(() => {
     localStorage.setItem(THEME_STORAGE_KEY, theme)
   }, [theme])
-
-  useEffect(() => {
-    if (theme === appliedTheme) {
-      return
-    }
-
-    const transitionTimeout = window.setTimeout(() => {
-      setAppliedTheme(theme)
-    }, 420)
-
-    return () => window.clearTimeout(transitionTimeout)
-  }, [theme, appliedTheme])
 
   function toggleTheme() {
     setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
@@ -65,13 +46,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
-      {theme !== appliedTheme && (
-        <div
-          className="theme-transition"
-          style={{ backgroundColor: themeColors[theme].pageBackground }}
-          aria-hidden="true"
-        />
-      )}
     </ThemeContext.Provider>
   )
 }

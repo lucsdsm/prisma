@@ -4,7 +4,7 @@
   justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid var(--color-border);
+  border: 0px solid var(--color-border);
   border-radius: 999px;
   background-color: var(--color-surface-muted);
   color: var(--color-text-muted);
@@ -41,40 +41,4 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
-}
-
-.theme-transition {
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-  pointer-events: none;
-  animation: theme-fade-in 0.42s ease-in forwards;
-}
-
-/* A camada fica atrás do conteúdo para manter os formulários visíveis durante o fade. */
-:root[data-theme-transitioning='true'] .login-page,
-:root[data-theme-transitioning='true'] .app-dashboard {
-  background: transparent;
-}
-
-.login-page > *,
-.app-dashboard > * {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes theme-fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .theme-transition {
-    animation-duration: 0.01ms;
-  }
 }

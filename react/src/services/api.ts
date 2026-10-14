@@ -6,6 +6,36 @@ if (!API_URL) {
   )
 }
 
+function getApiErrorMessage(data: unknown): string {
+  if (!data || typeof data !== 'object') {
+    return 'Não foi possível concluir a solicitação.'
+  }
+
+  const errors = data as Record<string, unknown>
+
+  if (typeof errors.detail === 'string') {
+    return errors.detail
+  }
+
+  if (typeof errors.message === 'string') {
+    return errors.message
+  }
+
+  const messages = Object.entries(errors).flatMap(([field, value]) => {
+    if (Array.isArray(value)) {
+      return value.map((message) => `${field}: ${String(message)}`)
+    }
+
+    if (typeof value === 'string') {
+      return [`${field}: ${value}`]
+    }
+
+    return []
+  })
+
+  return messages.join(' ') || 'Não foi possível concluir a solicitação.'
+}
+
 export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {},
@@ -31,6 +61,7 @@ export async function apiFetch<T>(
     const message =
       data?.detail ||
       data?.message ||
+      getApiErrorMessage(data) ||
       'Não foi possível concluir a solicitação.'
 
     throw new Error(message)

@@ -158,7 +158,7 @@ class Equipamento(models.Model):
 
     def __str__(self):
         identificador = self.tombo or str(self.pk)
-        return f"{self.get_tipo_display()} — {identificador}"
+        return f"{self.tipo} — {identificador}"
 
     @property
     def setor_atual(self):

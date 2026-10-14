@@ -1,45 +1,72 @@
 import { useState } from 'react'
+
 import { LoginPage } from '../pages/Login'
-import { isAuthenticated, logout } from '../services/auth.service'
-import { ThemeSwitch } from '../components/theme-switch'
+import { Sidebar } from '../components/sidebar'
+
+import {
+  getNavigationItem,
+  type SectionId,
+} from '../components/sidebar/navigation'
+
+import {
+  isAuthenticated,
+  logout,
+} from '../services/auth.service'
+
+import { section } from './section'
+
 import './App.css'
 
 export default function App() {
-  const [authenticated, setAuthenticated] = useState(isAuthenticated())
+  const [authenticated, setAuthenticated] = useState(isAuthenticated)
+
+  const [activeSection, setActiveSection] =
+    useState<SectionId>('equipamentos')
 
   function handleLoginSuccess() {
+    setActiveSection('equipamentos')
     setAuthenticated(true)
   }
 
   function handleLogout() {
     logout()
     setAuthenticated(false)
+    setActiveSection('equipamentos')
   }
 
   if (!authenticated) {
     return <LoginPage onLoginSuccess={handleLoginSuccess} />
   }
 
+  const currentSection = getNavigationItem(activeSection)
+  const CurrentPage = section[activeSection]
+
   return (
-    <main className="app-dashboard">
-      <div className="app-dashboard__theme-switch">
-        <ThemeSwitch />
-      </div>
+    <div className="app-layout">
+      <Sidebar
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+        onLogout={handleLogout}
+      />
 
-      <section className="app-dashboard__content">
-        <p className="app-dashboard__eyebrow">Acesso autenticado</p>
+      <main className="app-main">
+        <header className="app-main__header">
+          <p className="app-main__eyebrow">Prisma</p>
 
-        <h1>Bem-vindo ao inventário de TI</h1>
+          <h1>{currentSection.label}</h1>
 
-        <p>
-          O login foi realizado com sucesso. Nesta área você poderá montar,
-          posteriormente, o dashboard e as telas de equipamentos.
-        </p>
+          <p className="app-main__description">
+            {currentSection.description}
+          </p>
+        </header>
 
-        <button type="button" onClick={handleLogout}>
-          Sair
-        </button>
-      </section>
-    </main>
+        <section
+          className="app-main__panel"
+          aria-label={`Conteúdo de ${currentSection.label}`}
+        >
+          <CurrentPage />
+        </section>
+      </main>
+    </div>
   )
 }

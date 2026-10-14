@@ -1,0 +1,137 @@
+.registro-table__scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.registro-table__scroll:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.registro-table {
+  width: 100%;
+  min-width: 65rem;
+  border-collapse: collapse;
+
+  color: var(--color-text);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.registro-table__caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.registro-table th {
+  border-bottom: 0px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+  padding: 0.9rem 1rem;
+
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.registro-table td {
+  border-bottom: 0px solid var(--color-border);
+  padding: 1rem;
+  vertical-align: top;
+}
+
+.registro-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.registro-table tbody tr:hover {
+  background-color: var(--color-surface-muted);
+}
+
+.registro-table__date {
+  white-space: nowrap;
+}
+
+.registro-table__object {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 12rem;
+  overflow-wrap: anywhere;
+}
+
+.registro-table__muted {
+  color: var(--color-text-subtle);
+  font-size: 0.75rem;
+}
+
+.registro-table__badge {
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 0.25rem;
+  padding: 0.35rem 0.6rem;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.registro-table__badge--criacao {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: var(--color-text);
+  box-shadow: inset 3px 0 #22c55e;
+}
+
+.registro-table__badge--alteracao {
+  background-color: rgba(59, 130, 246, 0.12);
+  color: var(--color-text);
+  box-shadow: inset 3px 0 #3b82f6;
+}
+
+.registro-table__badge--exclusao {
+  background-color: var(--color-danger-background);
+  color: var(--color-danger);
+  box-shadow: inset 3px 0 var(--color-danger);
+}
+
+.registro-table__details {
+  min-width: 8rem;
+}
+
+.registro-table__details summary {
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.registro-table__details summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.registro-table__json {
+  width: 20rem;
+  max-height: 18rem;
+  overflow: auto;
+
+  border: 0px solid var(--color-border);
+  border-radius: 0.25rem;
+  background-color: var(--color-page-background);
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+
+  color: var(--color-text);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
