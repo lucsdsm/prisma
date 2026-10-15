@@ -322,12 +322,6 @@ export function EquipamentoTable({
                   <td>
                     {isEditing ? (
                       <div className="equipamento-table__select">
-                        <label
-                          className="equipamento-table__sr-only"
-                          htmlFor={`${fieldPrefix}-tipo`}
-                        >
-                          Tipo do equipamento
-                        </label>
 
                         <Select
                           id={`${fieldPrefix}-tipo`}
@@ -392,12 +386,6 @@ export function EquipamentoTable({
                   <td>
                     {isEditing ? (
                       <div className="equipamento-table__select">
-                        <label
-                          className="equipamento-table__sr-only"
-                          htmlFor={`${fieldPrefix}-propriedade`}
-                        >
-                          Propriedade do equipamento
-                        </label>
 
                         <Select
                           id={`${fieldPrefix}-propriedade`}
@@ -426,12 +414,6 @@ export function EquipamentoTable({
                   <td>
                     {isEditing ? (
                       <div className="equipamento-table__select equipamento-table__select--wide">
-                        <label
-                          className="equipamento-table__sr-only"
-                          htmlFor={`${fieldPrefix}-responsavel`}
-                        >
-                          Responsável pelo equipamento
-                        </label>
 
                         <Select
                           id={`${fieldPrefix}-responsavel`}
@@ -468,12 +450,6 @@ export function EquipamentoTable({
                   <td>
                     {isEditing ? (
                       <div className="equipamento-table__select">
-                        <label
-                          className="equipamento-table__sr-only"
-                          htmlFor={`${fieldPrefix}-status`}
-                        >
-                          Status do equipamento
-                        </label>
 
                         <Select
                           id={`${fieldPrefix}-status`}

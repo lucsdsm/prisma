@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
+from .context import usuario_atual
 from .models import (
     Cargo,
     Equipamento,
@@ -24,6 +25,27 @@ from .serializers import (
 
 class BaseViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        token = usuario_atual.set(self.request.user)
+        try:
+            serializer.save()
+        finally:
+            usuario_atual.reset(token)
+
+    def perform_update(self, serializer):
+        token = usuario_atual.set(self.request.user)
+        try:
+            serializer.save()
+        finally:
+            usuario_atual.reset(token)
+
+    def perform_destroy(self, instance):
+        token = usuario_atual.set(self.request.user)
+        try:
+            instance.delete()
+        finally:
+            usuario_atual.reset(token)
 
 
 class CargoViewSet(BaseViewSet):
