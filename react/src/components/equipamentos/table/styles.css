@@ -52,7 +52,7 @@
 }
 
 .equipamento-table tbody tr:hover {
-  background-color: var(--color-surface-muted);
+  background-color: var(--color-surface);
 }
 
 .equipamento-table__identifier {
@@ -96,9 +96,9 @@
   min-width: 9rem;
   padding: 0.6rem 0.7rem;
 
-  border: 1px solid var(--color-border);
+  border: 0px solid var(--color-border);
   border-radius: 0.25rem;
-  background-color: var(--color-surface);
+  background-color: var(--color-surface-muted);
   color: var(--color-text);
 
   font: inherit;
@@ -125,7 +125,7 @@
   justify-content: center;
   gap: 0.35rem;
 
-  border: 1px solid var(--color-border);
+  border: 0px solid var(--color-border);
   border-radius: 0.25rem;
   background-color: var(--color-surface-muted);
   padding: 0.5rem 0.65rem;
@@ -168,4 +168,24 @@
   color: var(--color-danger);
   font-size: 0.85rem;
   line-height: 1.5;
+}
+
+.equipamento-table__select {
+  min-width: 10rem;
+}
+
+.equipamento-table__select--wide {
+  min-width: 16rem;
+}
+
+.equipamento-table__select .prisma-select__trigger {
+  min-height: 2.5rem;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.equipamento-table__notice {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.8rem;
 }

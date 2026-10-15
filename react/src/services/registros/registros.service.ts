@@ -1,9 +1,9 @@
-import { apiFetch } from './api'
+import { apiFetch } from '../api'
 
 import type {
   Registro,
   RegistrosList,
-} from '../types/registro'
+} from '../../types/registro'
 
 interface PaginatedResponse<T> {
   count: number

@@ -1,5 +1,5 @@
-import { apiFetch } from './api'
-import type { LoginCredentials, LoginResponse } from '../types/auth'
+import { apiFetch } from '../api'
+import type { LoginCredentials, LoginResponse } from '../../types/auth'
 
 export async function login(
   credentials: LoginCredentials,

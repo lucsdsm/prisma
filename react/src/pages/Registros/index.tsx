@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { RefreshCw } from 'lucide-react'
 
 import { RegistroTable } from '../../components/registros/table'
-import { listarRegistros } from '../../services/registros.service'
+import { listarRegistros } from '../../services/registros/registros.service'
 
 import type { RegistrosList } from '../../types/registro'
 

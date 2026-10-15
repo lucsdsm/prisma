@@ -41,3 +41,21 @@ export interface EquipamentosList {
   total: number
   hasNextPage: boolean
 }
+
+export interface EquipamentoCreate {
+  tipo: number
+  marca: string
+  modelo: string
+
+  propriedade: number
+  tombo: string | null
+
+  responsavel_atual: number | null
+  status: number | null
+
+  data_fornecimento: string | null
+  data_entrega_atual: string | null
+
+  descricao: string
+  observacoes: string
+}

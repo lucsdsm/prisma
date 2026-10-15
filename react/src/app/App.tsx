@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { LoginPage } from '../pages/Login'
 import { Sidebar } from '../components/sidebar'
@@ -11,7 +11,7 @@ import {
 import {
   isAuthenticated,
   logout,
-} from '../services/auth.service'
+} from '../services/login/login.service'
 
 import { section } from './section'
 
@@ -22,6 +22,16 @@ export default function App() {
 
   const [activeSection, setActiveSection] =
     useState<SectionId>('equipamentos')
+
+  useEffect(() => {
+    function handleSessionExpired() {
+      setAuthenticated(false)
+      setActiveSection('equipamentos')
+    }
+
+    window.addEventListener('auth:logout', handleSessionExpired)
+    return () => window.removeEventListener('auth:logout', handleSessionExpired)
+  }, [])
 
   function handleLoginSuccess() {
     setActiveSection('equipamentos')

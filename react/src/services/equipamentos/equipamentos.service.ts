@@ -1,10 +1,11 @@
-import { apiFetch } from './api'
+import { apiFetch } from '../api'
 
 import type {
   Equipamento,
   EquipamentosList,
+  EquipamentoCreate,
   PaginatedResponse,
-} from '../types/equipamento'
+} from '../../types/equipamento'
 
 export async function listarEquipamentos(
   signal?: AbortSignal,
@@ -35,6 +36,20 @@ export interface EquipamentoInlineUpdate {
   tombo: string | null
   marca: string
   modelo: string
+
+  tipo: number
+  propriedade: number
+  responsavel_atual: number | null
+  status: number | null
+}
+
+export async function criarEquipamento(
+  dados: EquipamentoCreate,
+): Promise<Equipamento> {
+  return apiFetch<Equipamento>('/equipamentos/', {
+    method: 'POST',
+    body: JSON.stringify(dados),
+  })
 }
 
 export async function atualizarEquipamento(

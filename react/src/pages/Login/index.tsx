@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { PrismaLogo } from '../../components/brand'
 import { ThemeSwitch } from '../../components/theme-switch'
-import { login } from '../../services/auth.service'
+import { login } from '../../services/login/login.service'
 import './styles.css'
 
 interface LoginPageProps {
