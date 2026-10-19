@@ -16,7 +16,7 @@ import './styles.css'
 
 interface FuncionarioFormProps {
   onCancel: () => void
-  onCreated: () => void
+  onCreated: (addAnother?: boolean) => void
 }
 
 interface FormValues {
@@ -48,6 +48,7 @@ export function FuncionarioForm({
   const [optionsError, setOptionsError] = useState('')
   const [submitError, setSubmitError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [saveAndAddAnother, setSaveAndAddAnother] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
@@ -141,7 +142,7 @@ export function FuncionarioForm({
     }
 
     setIsSaving(false)
-    onCreated()
+    onCreated(saveAndAddAnother)
   }
 
   return (
@@ -318,9 +319,20 @@ export function FuncionarioForm({
           </button>
 
           <button
+            className="funcionario-form__submit funcionario-form__submit--secondary"
+            type="submit"
+            disabled={isFormDisabled}
+            onClick={() => setSaveAndAddAnother(true)}
+          >
+            <Save size={16} aria-hidden="true" />
+            {isSaving ? 'Salvando...' : 'Salvar e adicionar outro'}
+          </button>
+
+          <button
             className="funcionario-form__submit"
             type="submit"
             disabled={isFormDisabled}
+            onClick={() => setSaveAndAddAnother(false)}
           >
             <Save size={16} aria-hidden="true" />
             {isSaving ? 'Salvando...' : 'Salvar funcionário'}

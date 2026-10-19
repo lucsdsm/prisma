@@ -10,6 +10,7 @@ type ViewMode = 'list' | 'create'
 export function EquipamentosPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [successMessage, setSuccessMessage] = useState('')
+  const [formKey, setFormKey] = useState(0)
 
   function handleOpenCreate() {
     setSuccessMessage('')
@@ -20,8 +21,12 @@ export function EquipamentosPage() {
     setViewMode('list')
   }
 
-  function handleCreated() {
-    setSuccessMessage('Equipamento cadastrado com sucesso.')
+  function handleCreated(addAnother = false) {
+    setSuccessMessage(addAnother ? 'Equipamento cadastrado com sucesso. Você pode adicionar outro.' : 'Equipamento cadastrado com sucesso.')
+    if (addAnother) {
+      setFormKey((value) => value + 1)
+      return
+    }
     setViewMode('list')
   }
 
@@ -37,6 +42,7 @@ export function EquipamentosPage() {
         <EquipamentoList onAdd={handleOpenCreate} />
       ) : (
         <EquipamentoForm
+          key={formKey}
           onCancel={handleCancelCreate}
           onCreated={handleCreated}
         />

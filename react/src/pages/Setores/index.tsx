@@ -10,14 +10,19 @@ type ViewMode = 'list' | 'create'
 export function SetoresPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [successMessage, setSuccessMessage] = useState('')
+  const [formKey, setFormKey] = useState(0)
 
   function handleOpenCreate() {
     setSuccessMessage('')
     setViewMode('create')
   }
 
-  function handleCreated() {
-    setSuccessMessage('Setor cadastrado com sucesso.')
+  function handleCreated(addAnother = false) {
+    setSuccessMessage(addAnother ? 'Setor cadastrado com sucesso. Você pode adicionar outro.' : 'Setor cadastrado com sucesso.')
+    if (addAnother) {
+      setFormKey((value) => value + 1)
+      return
+    }
     setViewMode('list')
   }
 
@@ -34,6 +39,7 @@ export function SetoresPage() {
       ) : (
         <SetorForm
           onCancel={() => setViewMode('list')}
+          key={formKey}
           onCreated={handleCreated}
         />
       )}

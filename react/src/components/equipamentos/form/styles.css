@@ -206,6 +206,11 @@
   color: var(--color-accent-contrast);
 }
 
+.equipamento-form__submit--secondary {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
 .equipamento-form__cancel:hover:not(:disabled),
 .equipamento-form__submit:hover:not(:disabled) {
   filter: brightness(1.08);

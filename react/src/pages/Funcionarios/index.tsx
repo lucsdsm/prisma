@@ -10,14 +10,19 @@ type ViewMode = 'list' | 'create'
 export function FuncionariosPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [successMessage, setSuccessMessage] = useState('')
+  const [formKey, setFormKey] = useState(0)
 
   function handleOpenCreate() {
     setSuccessMessage('')
     setViewMode('create')
   }
 
-  function handleCreated() {
-    setSuccessMessage('Funcionário cadastrado com sucesso.')
+  function handleCreated(addAnother = false) {
+    setSuccessMessage(addAnother ? 'Funcionário cadastrado com sucesso. Você pode adicionar outro.' : 'Funcionário cadastrado com sucesso.')
+    if (addAnother) {
+      setFormKey((value) => value + 1)
+      return
+    }
     setViewMode('list')
   }
 
@@ -33,6 +38,7 @@ export function FuncionariosPage() {
         <FuncionarioList onAdd={handleOpenCreate} />
       ) : (
         <FuncionarioForm
+          key={formKey}
           onCancel={() => setViewMode('list')}
           onCreated={handleCreated}
         />

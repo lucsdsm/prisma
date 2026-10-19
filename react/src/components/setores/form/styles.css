@@ -170,6 +170,11 @@
   color: var(--color-accent-contrast);
 }
 
+.setor-form__submit--secondary {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
 .setor-form button:disabled {
   cursor: not-allowed;
   opacity: 0.55;

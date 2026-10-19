@@ -14,7 +14,7 @@ import './styles.css'
 
 interface EquipamentoFormProps {
   onCancel: () => void
-  onCreated: () => void
+  onCreated: (addAnother?: boolean) => void
 }
 
 interface FormValues {
@@ -62,6 +62,7 @@ export function EquipamentoForm({
   const [optionsError, setOptionsError] = useState('')
   const [submitError, setSubmitError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [saveAndAddAnother, setSaveAndAddAnother] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
@@ -170,7 +171,7 @@ export function EquipamentoForm({
     }
 
     setIsSaving(false)
-    onCreated()
+    onCreated(saveAndAddAnother)
   }
 
   const isFormDisabled = isSaving || isLoadingOptions || Boolean(optionsError)
@@ -476,9 +477,20 @@ export function EquipamentoForm({
           </button>
 
           <button
+            className="equipamento-form__submit equipamento-form__submit--secondary"
+            type="submit"
+            disabled={isFormDisabled}
+            onClick={() => setSaveAndAddAnother(true)}
+          >
+            <Save size={16} aria-hidden="true" />
+            {isSaving ? 'Salvando...' : 'Salvar e adicionar outro'}
+          </button>
+
+          <button
             className="equipamento-form__submit"
             type="submit"
             disabled={isFormDisabled}
+            onClick={() => setSaveAndAddAnother(false)}
           >
             <Save size={16} aria-hidden="true" />
             {isSaving ? 'Salvando...' : 'Salvar equipamento'}

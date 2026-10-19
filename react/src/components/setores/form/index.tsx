@@ -11,7 +11,7 @@ import './styles.css'
 
 interface SetorFormProps {
   onCancel: () => void
-  onCreated: () => void
+  onCreated: (addAnother?: boolean) => void
 }
 
 interface FormValues {
@@ -33,6 +33,7 @@ export function SetorForm({
   const [form, setForm] = useState<FormValues>(initialForm)
   const [submitError, setSubmitError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [saveAndAddAnother, setSaveAndAddAnother] = useState(false)
 
   const isDirty =
     form.nome !== initialForm.nome ||
@@ -99,7 +100,7 @@ export function SetorForm({
     }
 
     setIsSaving(false)
-    onCreated()
+    onCreated(saveAndAddAnother)
   }
 
   return (
@@ -224,9 +225,20 @@ export function SetorForm({
           </button>
 
           <button
+            className="setor-form__submit setor-form__submit--secondary"
+            type="submit"
+            disabled={isSaving}
+            onClick={() => setSaveAndAddAnother(true)}
+          >
+            <Save size={16} aria-hidden="true" />
+            {isSaving ? 'Salvando...' : 'Salvar e adicionar outro'}
+          </button>
+
+          <button
             className="setor-form__submit"
             type="submit"
             disabled={isSaving}
+            onClick={() => setSaveAndAddAnother(false)}
           >
             <Save size={16} aria-hidden="true" />
             {isSaving ? 'Salvando...' : 'Salvar setor'}

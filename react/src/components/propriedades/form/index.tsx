@@ -6,7 +6,7 @@ import './styles.css'
 
 interface PropriedadeFormProps {
   onCancel: () => void
-  onCreated: () => void
+  onCreated: (addAnother?: boolean) => void
 }
 
 interface FormValues {
@@ -22,6 +22,7 @@ export function PropriedadeForm({ onCancel, onCreated }: PropriedadeFormProps) {
   const [form, setForm] = useState<FormValues>(initialForm)
   const [submitError, setSubmitError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [saveAndAddAnother, setSaveAndAddAnother] = useState(false)
   const isDirty = form.nome !== initialForm.nome || form.ordem !== initialForm.ordem || form.ativo !== initialForm.ativo
 
   function handleCancel() {
@@ -52,7 +53,7 @@ export function PropriedadeForm({ onCancel, onCreated }: PropriedadeFormProps) {
       return
     }
     setIsSaving(false)
-    onCreated()
+    onCreated(saveAndAddAnother)
   }
 
   return (
@@ -94,7 +95,12 @@ export function PropriedadeForm({ onCancel, onCreated }: PropriedadeFormProps) {
         {submitError && <p className="propriedades-form__error" role="alert">{submitError}</p>}
         <div className="propriedades-form__actions">
           <button className="propriedades-form__cancel" type="button" onClick={handleCancel} disabled={isSaving}>Cancelar</button>
-          <button className="propriedades-form__submit" type="submit" disabled={isSaving}>
+          <button className="propriedades-form__submit propriedades-form__submit--secondary" type="submit" disabled={isSaving}
+            onClick={() => setSaveAndAddAnother(true)}>
+            <Save size={16} aria-hidden="true" />{isSaving ? 'Salvando...' : 'Salvar e adicionar outro'}
+          </button>
+          <button className="propriedades-form__submit" type="submit" disabled={isSaving}
+            onClick={() => setSaveAndAddAnother(false)}>
             <Save size={16} aria-hidden="true" />{isSaving ? 'Salvando...' : 'Salvar'}
           </button>
         </div>

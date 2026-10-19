@@ -52,5 +52,5 @@ http://localhost:8000/admin/
 
 # React
 ```
-http://localhost:3000
+http://localhost:5173
 ```

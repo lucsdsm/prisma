@@ -6,14 +6,19 @@ import './styles.css'
 export function PropriedadesPage() {
   const [viewMode, setViewMode] = useState<'list' | 'create'>('list')
   const [successMessage, setSuccessMessage] = useState('')
+  const [formKey, setFormKey] = useState(0)
 
   function handleOpenCreate() {
     setSuccessMessage('')
     setViewMode('create')
   }
 
-  function handleCreated() {
-    setSuccessMessage('Cadastro realizado com sucesso.')
+  function handleCreated(addAnother = false) {
+    setSuccessMessage(addAnother ? 'Propriedade cadastrada com sucesso. Você pode adicionar outra.' : 'Cadastro realizado com sucesso.')
+    if (addAnother) {
+      setFormKey((value) => value + 1)
+      return
+    }
     setViewMode('list')
   }
 
@@ -25,7 +30,7 @@ export function PropriedadesPage() {
       {viewMode === 'list' ? (
         <PropriedadeList onAdd={handleOpenCreate} />
       ) : (
-        <PropriedadeForm onCancel={() => setViewMode('list')} onCreated={handleCreated} />
+        <PropriedadeForm key={formKey} onCancel={() => setViewMode('list')} onCreated={handleCreated} />
       )}
     </div>
   )
