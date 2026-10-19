@@ -74,36 +74,36 @@ class BaseViewSet(viewsets.ModelViewSet):
 class CargoViewSet(BaseViewSet):
     queryset = Cargo.objects.all()
     serializer_class = CargoSerializer
-    search_fields = ("nome", "ordem", "ativo")
-    ordering_fields = ("nome", "ordem", "ativo")
+    search_fields = ("nome", "ativo")
+    ordering_fields = ("nome", "ativo")
 
 
 class TipoViewSet(BaseViewSet):
     queryset = Tipo.objects.all()
     serializer_class = TipoSerializer
-    search_fields = ("nome", "ordem", "ativo")
-    ordering_fields = ("nome", "ordem", "ativo")
+    search_fields = ("nome", "ativo")
+    ordering_fields = ("nome", "ativo")
 
 
 class PropriedadeViewSet(BaseViewSet):
     queryset = Propriedade.objects.all()
     serializer_class = PropriedadeSerializer
-    search_fields = ("nome", "ordem", "ativo")
-    ordering_fields = ("nome", "ordem", "ativo")
+    search_fields = ("nome", "ativo")
+    ordering_fields = ("nome", "ativo")
 
 
 class StatusViewSet(BaseViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
-    search_fields = ("nome", "ordem", "ativo")
-    ordering_fields = ("nome", "ordem", "ativo")
+    search_fields = ("nome", "ativo")
+    ordering_fields = ("nome", "ativo")
 
 
 class SetorViewSet(BaseViewSet):
     queryset = Setor.objects.all()
     serializer_class = SetorSerializer
-    search_fields = ("nome", "ordem", "ativo")
-    ordering_fields = ("nome", "ordem", "ativo")
+    search_fields = ("nome", "ativo")
+    ordering_fields = ("nome", "ativo")
 
 
 class FuncionarioViewSet(BaseViewSet):

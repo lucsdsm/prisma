@@ -15,7 +15,6 @@ interface TipoTableProps {
 
 interface EditForm {
   nome: string
-  ordem: string
   ativo: boolean
 }
 
@@ -24,13 +23,13 @@ export function TipoTable({ items, ordering, onSort, onSave, onDelete }: TipoTab
   const [editingId, setEditingId] = useState<number | null>(null)
   const [pendingId, setPendingId] = useState<number | null>(null)
   const [error, setError] = useState('')
-  const [form, setForm] = useState<EditForm>({ nome: '', ordem: '0', ativo: true })
+  const [form, setForm] = useState<EditForm>({ nome: '', ativo: true })
   const isBusy = pendingId !== null
 
   function startEditing(item: Tipo) {
     if (isBusy || editingId !== null) return
     setError('')
-    setForm({ nome: item.nome, ordem: String(item.ordem), ativo: item.ativo })
+    setForm({ nome: item.nome, ativo: item.ativo })
     setEditingId(item.id)
   }
 
@@ -46,15 +45,10 @@ export function TipoTable({ items, ordering, onSort, onSave, onDelete }: TipoTab
       setError('Informe o nome.')
       return
     }
-    const ordem = Number(form.ordem)
-    if (form.ordem.trim() === '' || !Number.isInteger(ordem) || ordem < 0 || ordem > 32767) {
-      setError('Informe uma ordem inteira entre 0 e 32767.')
-      return
-    }
     setPendingId(id)
     setError('')
     try {
-      await onSave(id, { nome: form.nome.trim(), ordem, ativo: form.ativo })
+      await onSave(id, { nome: form.nome.trim(), ativo: form.ativo })
       setEditingId(null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Não foi possível salvar o registro.')
@@ -92,7 +86,6 @@ export function TipoTable({ items, ordering, onSort, onSave, onDelete }: TipoTab
           <thead>
             <tr>
               <th scope="col"><SortableColumn field="nome" label="Nome" ordering={ordering} onSort={onSort} /></th>
-              <th scope="col"><SortableColumn field="ordem" label="Ordem" ordering={ordering} onSort={onSort} /></th>
               <th scope="col"><SortableColumn field="ativo" label="Situação" ordering={ordering} onSort={onSort} /></th>
               <th scope="col">Ações</th>
             </tr>
@@ -100,7 +93,6 @@ export function TipoTable({ items, ordering, onSort, onSave, onDelete }: TipoTab
           <tbody>
             {items.map((item) => {
               const isEditing = editingId === item.id
-              const isPending = pendingId === item.id
               const selectId = `${componentId}-${item.id}-ativo`
               return (
                 <tr key={item.id}>
@@ -110,14 +102,6 @@ export function TipoTable({ items, ordering, onSort, onSave, onDelete }: TipoTab
                         value={form.nome} maxLength={100} disabled={isBusy}
                         onChange={(event) => setForm((current) => ({ ...current, nome: event.target.value }))} />
                     ) : <span className="tipos-table__name">{item.nome}</span>}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input className="tipos-table__input tipos-table__input--order"
-                        aria-label="Ordem" type="number" min={0} max={32767} step={1}
-                        value={form.ordem} disabled={isBusy}
-                        onChange={(event) => setForm((current) => ({ ...current, ordem: event.target.value }))} />
-                    ) : item.ordem}
                   </td>
                   <td>
                     {isEditing ? (

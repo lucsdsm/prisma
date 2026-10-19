@@ -7,10 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 class Cargo(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     ativo = models.BooleanField(default=True)
-    ordem = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ("ordem", "nome")
+        ordering = ("nome",)
         verbose_name = "Cargo"
         verbose_name_plural = "Cargos"
 
@@ -20,10 +19,9 @@ class Cargo(models.Model):
 class Tipo(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     ativo = models.BooleanField(default=True)
-    ordem = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ("ordem", "nome")
+        ordering = ("nome",)
         verbose_name = "Tipo de equipamento"
         verbose_name_plural = "Tipos de equipamento"
 
@@ -33,10 +31,9 @@ class Tipo(models.Model):
 class Propriedade(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     ativo = models.BooleanField(default=True)
-    ordem = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ("ordem", "nome")
+        ordering = ("nome",)
         verbose_name = "Propriedade"
         verbose_name_plural = "Propriedades"
 
@@ -46,10 +43,9 @@ class Propriedade(models.Model):
 class Status(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     ativo = models.BooleanField(default=True)
-    ordem = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ("ordem", "nome")
+        ordering = ("nome",)
         verbose_name = "Status de equipamento"
         verbose_name_plural = "Status de equipamentos"
 
@@ -59,8 +55,6 @@ class Status(models.Model):
 class Setor(models.Model):
     nome = models.CharField(max_length=150, unique=True)
     ativo = models.BooleanField(default=True)
-    ordem = models.PositiveSmallIntegerField(default=0)
-
     class Meta:
         ordering = ["nome"]
         verbose_name = "Setor"

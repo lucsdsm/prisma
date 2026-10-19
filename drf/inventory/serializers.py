@@ -14,7 +14,7 @@ from .models import (
 
 class NomeAtivoSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ("id", "nome", "ativo", "ordem")
+        fields = ("id", "nome", "ativo")
 
 
 class CargoSerializer(NomeAtivoSerializer):
@@ -40,7 +40,7 @@ class StatusSerializer(NomeAtivoSerializer):
 class SetorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setor
-        fields = ("id", "nome", "ativo", "ordem")
+        fields = ("id", "nome", "ativo")
 
 
 class FuncionarioSerializer(serializers.ModelSerializer):

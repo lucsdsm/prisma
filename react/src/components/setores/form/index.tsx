@@ -16,13 +16,11 @@ interface SetorFormProps {
 
 interface FormValues {
   nome: string
-  ordem: string
   ativo: boolean
 }
 
 const initialForm: FormValues = {
   nome: '',
-  ordem: '0',
   ativo: true,
 }
 
@@ -37,7 +35,6 @@ export function SetorForm({
 
   const isDirty =
     form.nome !== initialForm.nome ||
-    form.ordem !== initialForm.ordem ||
     form.ativo !== initialForm.ativo
 
   function handleCancel() {
@@ -67,25 +64,12 @@ export function SetorForm({
       return
     }
 
-    const ordem = Number(form.ordem)
-
-    if (
-      form.ordem.trim() === '' ||
-      !Number.isInteger(ordem) ||
-      ordem < 0 ||
-      ordem > 32767
-    ) {
-      setSubmitError('Informe uma ordem inteira entre 0 e 32767.')
-      return
-    }
-
     setIsSaving(true)
     setSubmitError('')
 
     try {
       await criarSetor({
         nome: form.nome.trim(),
-        ordem,
         ativo: form.ativo,
       })
     } catch (err) {
@@ -152,31 +136,6 @@ export function SetorForm({
                   }))
                 }
               />
-            </div>
-
-            <div className="setor-form__field">
-              <label htmlFor="setor-ordem">Ordem *</label>
-
-              <input
-                id="setor-ordem"
-                type="number"
-                min={0}
-                max={32767}
-                step={1}
-                value={form.ordem}
-                required
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    ordem: event.target.value,
-                  }))
-                }
-              />
-
-              <p className="setor-form__hint">
-                Usada quando a listagem está configurada para ordenar
-                por este campo.
-              </p>
             </div>
 
             <div className="setor-form__field">

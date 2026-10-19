@@ -2,13 +2,11 @@ export interface Status {
   id: number
   nome: string
   ativo: boolean
-  ordem: number
 }
 
 export interface StatusInput {
   nome: string
   ativo: boolean
-  ordem: number
 }
 
 export interface StatusListagem {

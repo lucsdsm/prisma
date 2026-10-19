@@ -21,7 +21,6 @@ interface SetorTableProps {
 
 interface EditForm {
   nome: string
-  ordem: string
   ativo: boolean
 }
 
@@ -38,7 +37,6 @@ export function SetorTable({
 
   const [form, setForm] = useState<EditForm>({
     nome: '',
-    ordem: '0',
     ativo: true,
   })
 
@@ -54,7 +52,6 @@ export function SetorTable({
 
     setForm({
       nome: setor.nome,
-      ordem: String(setor.ordem),
       ativo: setor.ativo,
     })
   }
@@ -78,25 +75,12 @@ export function SetorTable({
       return
     }
 
-    const ordem = Number(form.ordem)
-
-    if (
-      form.ordem.trim() === '' ||
-      !Number.isInteger(ordem) ||
-      ordem < 0 ||
-      ordem > 32767
-    ) {
-      setError('Informe uma ordem inteira entre 0 e 32767.')
-      return
-    }
-
     setPendingId(id)
     setError('')
 
     try {
       await onSave(id, {
         nome: form.nome.trim(),
-        ordem,
         ativo: form.ativo,
       })
 
@@ -167,7 +151,6 @@ export function SetorTable({
           <thead>
             <tr>
               <th scope="col"><SortableColumn field="nome" label="Nome" ordering={ordering} onSort={onSort} /></th>
-              <th scope="col"><SortableColumn field="ordem" label="Ordem" ordering={ordering} onSort={onSort} /></th>
               <th scope="col"><SortableColumn field="ativo" label="Situação" ordering={ordering} onSort={onSort} /></th>
               <th scope="col">Ações</th>
             </tr>
@@ -176,7 +159,6 @@ export function SetorTable({
           <tbody>
             {setores.map((setor) => {
               const isEditing = editingId === setor.id
-              const isPending = pendingId === setor.id
 
               return (
                 <tr key={setor.id}>
@@ -199,29 +181,6 @@ export function SetorTable({
                       <span className="setor-table__name">
                         {setor.nome}
                       </span>
-                    )}
-                  </td>
-
-                  <td>
-                    {isEditing ? (
-                      <input
-                        className="setor-table__input setor-table__input--order"
-                        aria-label="Ordem do setor"
-                        type="number"
-                        min={0}
-                        max={32767}
-                        step={1}
-                        value={form.ordem}
-                        disabled={isBusy}
-                        onChange={(event) =>
-                          setForm((current) => ({
-                            ...current,
-                            ordem: event.target.value,
-                          }))
-                        }
-                      />
-                    ) : (
-                      setor.ordem
                     )}
                   </td>
 

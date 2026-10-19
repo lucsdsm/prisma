@@ -11,11 +11,10 @@ interface TipoFormProps {
 
 interface FormValues {
   nome: string
-  ordem: string
   ativo: boolean
 }
 
-const initialForm: FormValues = { nome: '', ordem: '0', ativo: true }
+const initialForm: FormValues = { nome: '', ativo: true }
 
 export function TipoForm({ onCancel, onCreated }: TipoFormProps) {
   const formId = useId()
@@ -23,7 +22,7 @@ export function TipoForm({ onCancel, onCreated }: TipoFormProps) {
   const [submitError, setSubmitError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [saveAndAddAnother, setSaveAndAddAnother] = useState(false)
-  const isDirty = form.nome !== initialForm.nome || form.ordem !== initialForm.ordem || form.ativo !== initialForm.ativo
+  const isDirty = form.nome !== initialForm.nome || form.ativo !== initialForm.ativo
 
   function handleCancel() {
     if (isSaving) return
@@ -38,15 +37,10 @@ export function TipoForm({ onCancel, onCreated }: TipoFormProps) {
       setSubmitError('Informe o nome.')
       return
     }
-    const ordem = Number(form.ordem)
-    if (form.ordem.trim() === '' || !Number.isInteger(ordem) || ordem < 0 || ordem > 32767) {
-      setSubmitError('Informe uma ordem inteira entre 0 e 32767.')
-      return
-    }
     setIsSaving(true)
     setSubmitError('')
     try {
-      await criarTipo({ nome: form.nome.trim(), ordem, ativo: form.ativo })
+      await criarTipo({ nome: form.nome.trim(), ativo: form.ativo })
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Não foi possível realizar o cadastro.')
       setIsSaving(false)
@@ -74,13 +68,6 @@ export function TipoForm({ onCancel, onCreated }: TipoFormProps) {
               <input id={`${formId}-nome`} value={form.nome} maxLength={100}
                 placeholder="Ex.: Notebook" required
                 onChange={(event) => setForm((current) => ({ ...current, nome: event.target.value }))} />
-            </div>
-            <div className="tipos-form__field">
-              <label htmlFor={`${formId}-ordem`}>Ordem *</label>
-              <input id={`${formId}-ordem`} type="number" min={0} max={32767} step={1}
-                value={form.ordem} required
-                onChange={(event) => setForm((current) => ({ ...current, ordem: event.target.value }))} />
-              <p className="tipos-form__hint">Valores menores aparecem primeiro na ordenação padrão.</p>
             </div>
             <div className="tipos-form__field">
               <label htmlFor={`${formId}-ativo`}>Situação</label>

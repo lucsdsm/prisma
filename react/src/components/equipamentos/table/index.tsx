@@ -274,9 +274,6 @@ export function EquipamentoTable({
             {equipamentos.map((equipamento) => {
               const isEditing = editingId === equipamento.id
               const isThisRowPending = pendingId === equipamento.id
-              const isThisRowLoading =
-                loadingOptionsId === equipamento.id
-
               const fieldPrefix = `equipamento-${equipamento.id}`
 
               const selectedFuncionario = isEditing

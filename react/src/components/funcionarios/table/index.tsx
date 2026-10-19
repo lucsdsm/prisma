@@ -228,7 +228,6 @@ export function FuncionarioTable({
             {funcionarios.map((funcionario) => {
               const isEditing = editingId === funcionario.id
               const isPending = pendingId === funcionario.id
-              const isLoading = loadingOptionsId === funcionario.id
               const prefix = `funcionario-${funcionario.id}`
 
               return (
