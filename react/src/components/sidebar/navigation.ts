@@ -7,10 +7,12 @@ import {
   Tags,
   CircleCheck,
   History,
+  LayoutDashboard,
   type LucideIcon,
 } from 'lucide-react'
 
 export type SectionId =
+  | 'dashboard'
   | 'equipamentos'
   | 'funcionarios'
   | 'setores'
@@ -33,6 +35,18 @@ export interface NavigationGroup {
 }
 
 export const navigationGroups: NavigationGroup[] = [
+  {
+  label: 'Visão geral',
+  items: [
+    {
+      id: 'dashboard',
+      label: 'Dashboard',
+      description:
+        'Visão analítica da distribuição dos equipamentos cadastrados.',
+      icon: LayoutDashboard,
+    },
+  ],
+  },
   {
     label: 'Inventário',
     items: [

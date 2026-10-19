@@ -1,11 +1,14 @@
 import { useId, useState } from 'react'
 import { Check, Pencil, Trash2, X } from 'lucide-react'
 import { Select } from '../../ui/select'
+import { SortableColumn } from '../../ui/list-controls'
 import type { Tipo, TipoInput } from '../../../types/tipos'
 import './styles.css'
 
 interface TipoTableProps {
   items: Tipo[]
+  ordering: string
+  onSort: (field: string) => void
   onSave: (id: number, dados: TipoInput) => Promise<void>
   onDelete: (item: Tipo) => Promise<void>
 }
@@ -16,7 +19,7 @@ interface EditForm {
   ativo: boolean
 }
 
-export function TipoTable({ items, onSave, onDelete }: TipoTableProps) {
+export function TipoTable({ items, ordering, onSort, onSave, onDelete }: TipoTableProps) {
   const componentId = useId()
   const [editingId, setEditingId] = useState<number | null>(null)
   const [pendingId, setPendingId] = useState<number | null>(null)
@@ -88,9 +91,9 @@ export function TipoTable({ items, onSave, onDelete }: TipoTableProps) {
           <caption className="tipos-table__sr-only">Tabela de tipos de equipamento</caption>
           <thead>
             <tr>
-              <th scope="col">Nome</th>
-              <th scope="col">Ordem</th>
-              <th scope="col">Situação</th>
+              <th scope="col"><SortableColumn field="nome" label="Nome" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="ordem" label="Ordem" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="ativo" label="Situação" ordering={ordering} onSort={onSort} /></th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
@@ -137,21 +140,21 @@ export function TipoTable({ items, onSave, onDelete }: TipoTableProps) {
                         <>
                           <button className="tipos-table__action" type="button" disabled={isBusy}
                             onClick={() => void handleSave(item.id)}>
-                            <Check size={16} aria-hidden="true" />{isPending ? 'Salvando...' : 'Salvar'}
+                            <Check size={16} aria-hidden="true" />
                           </button>
                           <button className="tipos-table__action" type="button" disabled={isBusy} onClick={cancelEditing}>
-                            <X size={16} aria-hidden="true" />Cancelar
+                            <X size={16} aria-hidden="true" />
                           </button>
                         </>
                       ) : (
                         <>
                           <button className="tipos-table__action" type="button"
                             disabled={isBusy || editingId !== null} onClick={() => startEditing(item)}>
-                            <Pencil size={16} aria-hidden="true" />Editar
+                            <Pencil size={16} aria-hidden="true" />
                           </button>
                           <button className="tipos-table__action tipos-table__action--danger" type="button"
                             disabled={isBusy || editingId !== null} onClick={() => void handleDelete(item)}>
-                            <Trash2 size={16} aria-hidden="true" />{isPending ? 'Excluindo...' : 'Excluir'}
+                            <Trash2 size={16} aria-hidden="true" />
                           </button>
                         </>
                       )}

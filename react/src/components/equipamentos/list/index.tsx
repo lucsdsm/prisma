@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
+import { ListControls, ListPagination } from '../../ui/list-controls'
 
 import { EquipamentoTable } from '../table'
 import {
@@ -10,6 +11,7 @@ import {
 } from '../../../services/equipamentos/equipamentos.service'
 
 import type { Equipamento, EquipamentosList } from '../../../types/equipamento'
+import { INITIAL_LIST_QUERY, type ListQuery } from '../../../types/listagem'
 
 import './styles.css'
 
@@ -24,11 +26,18 @@ export function EquipamentoList({
     items: [],
     total: 0,
     hasNextPage: false,
+    hasPreviousPage: false,
+    currentPage: 1,
+    totalPages: 1,
   })
 
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState<ListQuery>({
+    ...INITIAL_LIST_QUERY,
+    ordering: 'tipo__nome',
+  })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -38,7 +47,7 @@ export function EquipamentoList({
       setError('')
 
       try {
-        const data = await listarEquipamentos(controller.signal)
+        const data = await listarEquipamentos(query, controller.signal)
 
         if (!controller.signal.aborted) {
           setListagem(data)
@@ -65,7 +74,11 @@ export function EquipamentoList({
     return () => {
       controller.abort()
     }
-  }, [reloadKey])
+  }, [reloadKey, query])
+
+  function updateQuery(changes: Partial<ListQuery>) {
+    setQuery((current) => ({ ...current, ...changes }))
+  }
 
   function handleRefresh() {
     setReloadKey((value) => value + 1)
@@ -103,7 +116,8 @@ export function EquipamentoList({
 
   return (
     <div className="equipamentos-page">
-      <div className="equipamentos-page__toolbar">
+      <div className="equipamentos-page__toolbar list-toolbar">
+        <div className="list-toolbar__leading">
         <p className="equipamentos-page__count" aria-live="polite">
           {isLoading
             ? 'Carregando equipamentos...'
@@ -112,6 +126,10 @@ export function EquipamentoList({
               : `${listagem.items.length} de ${listagem.total} equipamentos`}
         </p>
 
+        <ListControls query={query} isLoading={isLoading}
+          onSearchChange={(search) => updateQuery({ search, page: 1 })} />
+        </div>
+        <ListPagination query={query} totalPages={listagem.totalPages} isLoading={isLoading} onPageChange={(page) => updateQuery({ page })} />
         <div className="equipamentos-page__actions">
             <button
                 className="equipamentos-page__refresh"
@@ -152,14 +170,8 @@ export function EquipamentoList({
         </div>
       ) : (
         <>
-          <EquipamentoTable equipamentos={listagem.items} onSave={handleSave} onDelete={handleDelete} />
+          <EquipamentoTable equipamentos={listagem.items} ordering={query.ordering} onSort={(field) => updateQuery({ ordering: query.ordering === field ? `-${field}` : field, page: 1 })} onSave={handleSave} onDelete={handleDelete} />
 
-          {listagem.hasNextPage && (
-            <p className="equipamentos-page__pagination-note">
-              A API retornou apenas a primeira página. Existem outros
-              equipamentos; os controles de paginação ainda serão implementados.
-            </p>
-          )}
         </>
       )}
     </div>

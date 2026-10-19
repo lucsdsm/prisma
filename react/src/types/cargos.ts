@@ -15,4 +15,7 @@ export interface CargoListagem {
   items: Cargo[]
   total: number
   hasNextPage: boolean
+  hasPreviousPage: boolean
+  currentPage: number
+  totalPages: number
 }

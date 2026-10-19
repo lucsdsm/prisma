@@ -4,32 +4,22 @@ import type {
   Equipamento,
   EquipamentosList,
   EquipamentoCreate,
-  PaginatedResponse,
 } from '../../types/equipamento'
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
 export async function listarEquipamentos(
+  query: ListQuery,
   signal?: AbortSignal,
 ): Promise<EquipamentosList> {
   const response = await apiFetch<
     Equipamento[] | PaginatedResponse<Equipamento>
-  >('/equipamentos/', {
+  >(`/equipamentos/${criarQueryString(query)}`, {
     method: 'GET',
     signal,
   })
 
-  if (Array.isArray(response)) {
-    return {
-      items: response,
-      total: response.length,
-      hasNextPage: false,
-    }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export interface EquipamentoInlineUpdate {

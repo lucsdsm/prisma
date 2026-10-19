@@ -5,37 +5,21 @@ import type {
   SetorInput,
   SetoresList,
 } from '../../types/setor'
-
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
 export async function listarSetores(
+  query: ListQuery,
   signal?: AbortSignal,
 ): Promise<SetoresList> {
   const response = await apiFetch<
     Setor[] | PaginatedResponse<Setor>
-  >('/setores/', {
+  >(`/setores/${criarQueryString(query)}`, {
     method: 'GET',
     signal,
   })
 
-  if (Array.isArray(response)) {
-    return {
-      items: response,
-      total: response.length,
-      hasNextPage: false,
-    }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export async function criarSetor(

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, Pencil, Trash2, X } from 'lucide-react'
 
 import { Select } from '../../ui/select'
+import { SortableColumn } from '../../ui/list-controls'
 
 import type {
   Setor,
@@ -12,6 +13,8 @@ import './styles.css'
 
 interface SetorTableProps {
   setores: Setor[]
+  ordering: string
+  onSort: (field: string) => void
   onSave: (id: number, dados: SetorInput) => Promise<void>
   onDelete: (setor: Setor) => Promise<void>
 }
@@ -24,6 +27,8 @@ interface EditForm {
 
 export function SetorTable({
   setores,
+  ordering,
+  onSort,
   onSave,
   onDelete,
 }: SetorTableProps) {
@@ -161,9 +166,9 @@ export function SetorTable({
 
           <thead>
             <tr>
-              <th scope="col">Nome</th>
-              <th scope="col">Ordem</th>
-              <th scope="col">Situação</th>
+              <th scope="col"><SortableColumn field="nome" label="Nome" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="ordem" label="Ordem" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="ativo" label="Situação" ordering={ordering} onSort={onSort} /></th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
@@ -270,7 +275,6 @@ export function SetorTable({
                             onClick={() => void handleSave(setor.id)}
                           >
                             <Check size={16} aria-hidden="true" />
-                            {isPending ? 'Salvando...' : 'Salvar'}
                           </button>
 
                           <button
@@ -280,7 +284,6 @@ export function SetorTable({
                             onClick={cancelEditing}
                           >
                             <X size={16} aria-hidden="true" />
-                            Cancelar
                           </button>
                         </>
                       ) : (
@@ -292,7 +295,7 @@ export function SetorTable({
                             onClick={() => startEditing(setor)}
                           >
                             <Pencil size={16} aria-hidden="true" />
-                            Editar
+                            
                           </button>
 
                           <button
@@ -302,7 +305,6 @@ export function SetorTable({
                             onClick={() => void handleDelete(setor)}
                           >
                             <Trash2 size={16} aria-hidden="true" />
-                            {isPending ? 'Excluindo...' : 'Excluir'}
                           </button>
                         </>
                       )}

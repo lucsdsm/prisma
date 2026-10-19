@@ -15,7 +15,8 @@
 }
 
 .app-main__header {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  align-items: center;
 }
 
 .app-main__eyebrow {
@@ -92,7 +93,7 @@
   }
 
   .app-main__panel {
-    padding: 1rem;
+    padding: 0.9rem;
   }
 }
 

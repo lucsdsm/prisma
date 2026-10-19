@@ -21,7 +21,7 @@ async function listarTodasOpcoes<T>(
   signal?: AbortSignal,
 ): Promise<T[]> {
   const items: T[] = []
-  let currentEndpoint: string | null = endpoint
+  let currentEndpoint: string | null = `${endpoint}?page_size=1000`
 
   while (currentEndpoint) {
     const response: T[] | PaginatedOptions<T> = await apiFetch<

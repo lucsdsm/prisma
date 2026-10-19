@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, Pencil, Trash2, X } from 'lucide-react'
 
 import { Select, type SelectOption } from '../../ui/select'
+import { SortableColumn } from '../../ui/list-controls'
 
 import {
   carregarOpcoesFuncionario,
@@ -17,6 +18,8 @@ import './styles.css'
 
 interface FuncionarioTableProps {
   funcionarios: Funcionario[]
+  ordering: string
+  onSort: (field: string) => void
   onSave: (
     id: number,
     dados: FuncionarioInput,
@@ -53,6 +56,8 @@ function includeCurrentOption(
 
 export function FuncionarioTable({
   funcionarios,
+  ordering,
+  onSort,
   onSave,
   onDelete,
 }: FuncionarioTableProps) {
@@ -211,10 +216,10 @@ export function FuncionarioTable({
 
           <thead>
             <tr>
-              <th scope="col">Nome</th>
-              <th scope="col">Setor</th>
-              <th scope="col">Cargo</th>
-              <th scope="col">Situação</th>
+              <th scope="col"><SortableColumn field="nome" label="Nome" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="setor__nome" label="Setor" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="cargo__nome" label="Cargo" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="ativo" label="Situação" ordering={ordering} onSort={onSort} /></th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
@@ -398,7 +403,6 @@ export function FuncionarioTable({
                             }
                           >
                             <Pencil size={16} aria-hidden="true" />
-                            {isLoading ? 'Carregando...' : 'Editar'}
                           </button>
 
                           <button
@@ -410,7 +414,6 @@ export function FuncionarioTable({
                             }
                           >
                             <Trash2 size={16} aria-hidden="true" />
-                            {isPending ? 'Excluindo...' : 'Excluir'}
                           </button>
                         </>
                       )}

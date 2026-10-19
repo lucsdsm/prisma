@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
+import { ListControls, ListPagination } from '../../ui/list-controls'
 import { TipoTable } from '../table'
 import {
   listarTipo,
@@ -7,6 +8,7 @@ import {
   excluirTipo,
 } from '../../../services/tipos/tipos.service'
 import type { Tipo, TipoInput, TipoListagem } from '../../../types/tipos'
+import { INITIAL_LIST_QUERY, type ListQuery } from '../../../types/listagem'
 import './styles.css'
 
 interface TipoListProps {
@@ -15,11 +17,12 @@ interface TipoListProps {
 
 export function TipoList({ onAdd }: TipoListProps) {
   const [listagem, setListagem] = useState<TipoListagem>({
-    items: [], total: 0, hasNextPage: false,
+    items: [], total: 0, hasNextPage: false, hasPreviousPage: false, currentPage: 1, totalPages: 1,
   })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState<ListQuery>(INITIAL_LIST_QUERY)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -28,7 +31,7 @@ export function TipoList({ onAdd }: TipoListProps) {
       setIsLoading(true)
       setError('')
       try {
-        const data = await listarTipo(controller.signal)
+        const data = await listarTipo(query, controller.signal)
         if (!controller.signal.aborted) setListagem(data)
       } catch (err) {
         if (!controller.signal.aborted) {
@@ -41,7 +44,11 @@ export function TipoList({ onAdd }: TipoListProps) {
 
     void carregar()
     return () => controller.abort()
-  }, [reloadKey])
+  }, [reloadKey, query])
+
+  function updateQuery(changes: Partial<ListQuery>) {
+    setQuery((current) => ({ ...current, ...changes }))
+  }
 
   async function handleSave(id: number, dados: TipoInput): Promise<void> {
     const atualizado = await atualizarTipo(id, dados)
@@ -62,11 +69,16 @@ export function TipoList({ onAdd }: TipoListProps) {
 
   return (
     <div className="tipos-list">
-      <div className="tipos-list__toolbar">
+      <div className="tipos-list__toolbar list-toolbar">
+        <div className="list-toolbar__leading">
         <p className="tipos-list__count" aria-live="polite">
           {isLoading ? 'Carregando...' : error ? 'Listagem indisponível'
             : `${listagem.items.length} de ${listagem.total} registros`}
         </p>
+        <ListControls query={query} isLoading={isLoading}
+          onSearchChange={(search) => updateQuery({ search, page: 1 })} />
+        </div>
+        <ListPagination query={query} totalPages={listagem.totalPages} isLoading={isLoading} onPageChange={(page) => updateQuery({ page })} />
         <div className="tipos-list__actions">
           <button className="tipos-list__refresh" type="button"
             onClick={() => setReloadKey((value) => value + 1)} disabled={isLoading}>
@@ -88,13 +100,7 @@ export function TipoList({ onAdd }: TipoListProps) {
         <div className="tipos-list__message">Nenhum registro encontrado.</div>
       ) : (
         <>
-          <TipoTable items={listagem.items} onSave={handleSave} onDelete={handleDelete} />
-          {listagem.hasNextPage && (
-            <p className="tipos-list__hint">
-              A API retornou apenas a primeira página. Existem mais registros;
-              os controles de paginação ainda serão implementados.
-            </p>
-          )}
+          <TipoTable items={listagem.items} ordering={query.ordering} onSort={(field) => updateQuery({ ordering: query.ordering === field ? `-${field}` : field, page: 1 })} onSave={handleSave} onDelete={handleDelete} />
         </>
       )}
     </div>

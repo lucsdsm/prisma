@@ -1,28 +1,14 @@
 import { apiFetch } from '../api'
 import type { Tipo, TipoInput, TipoListagem } from '../../types/tipos'
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
-
-export async function listarTipo(signal?: AbortSignal): Promise<TipoListagem> {
+export async function listarTipo(query: ListQuery, signal?: AbortSignal): Promise<TipoListagem> {
   const response = await apiFetch<Tipo[] | PaginatedResponse<Tipo>>(
-    '/tipos/',
+    `/tipos/${criarQueryString(query)}`,
     { method: 'GET', signal },
   )
-
-  if (Array.isArray(response)) {
-    return { items: response, total: response.length, hasNextPage: false }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export async function criarTipo(dados: TipoInput): Promise<Tipo> {

@@ -15,4 +15,7 @@ export interface PropriedadeListagem {
   items: Propriedade[]
   total: number
   hasNextPage: boolean
+  hasPreviousPage: boolean
+  currentPage: number
+  totalPages: number
 }

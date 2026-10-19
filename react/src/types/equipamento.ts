@@ -40,6 +40,9 @@ export interface EquipamentosList {
   items: Equipamento[]
   total: number
   hasNextPage: boolean
+  hasPreviousPage: boolean
+  currentPage: number
+  totalPages: number
 }
 
 export interface EquipamentoCreate {

@@ -15,4 +15,7 @@ export interface SetoresList {
   items: Setor[]
   total: number
   hasNextPage: boolean
+  hasPreviousPage: boolean
+  currentPage: number
+  totalPages: number
 }

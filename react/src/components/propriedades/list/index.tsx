@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
+import { ListControls, ListPagination } from '../../ui/list-controls'
 import { PropriedadeTable } from '../table'
 import {
   listarPropriedade,
@@ -7,6 +8,7 @@ import {
   excluirPropriedade,
 } from '../../../services/propriedades/propriedades.service'
 import type { Propriedade, PropriedadeInput, PropriedadeListagem } from '../../../types/propriedades'
+import { INITIAL_LIST_QUERY, type ListQuery } from '../../../types/listagem'
 import './styles.css'
 
 interface PropriedadeListProps {
@@ -15,11 +17,12 @@ interface PropriedadeListProps {
 
 export function PropriedadeList({ onAdd }: PropriedadeListProps) {
   const [listagem, setListagem] = useState<PropriedadeListagem>({
-    items: [], total: 0, hasNextPage: false,
+    items: [], total: 0, hasNextPage: false, hasPreviousPage: false, currentPage: 1, totalPages: 1,
   })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState<ListQuery>(INITIAL_LIST_QUERY)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -28,7 +31,7 @@ export function PropriedadeList({ onAdd }: PropriedadeListProps) {
       setIsLoading(true)
       setError('')
       try {
-        const data = await listarPropriedade(controller.signal)
+        const data = await listarPropriedade(query, controller.signal)
         if (!controller.signal.aborted) setListagem(data)
       } catch (err) {
         if (!controller.signal.aborted) {
@@ -41,7 +44,11 @@ export function PropriedadeList({ onAdd }: PropriedadeListProps) {
 
     void carregar()
     return () => controller.abort()
-  }, [reloadKey])
+  }, [reloadKey, query])
+
+  function updateQuery(changes: Partial<ListQuery>) {
+    setQuery((current) => ({ ...current, ...changes }))
+  }
 
   async function handleSave(id: number, dados: PropriedadeInput): Promise<void> {
     const atualizado = await atualizarPropriedade(id, dados)
@@ -62,11 +69,16 @@ export function PropriedadeList({ onAdd }: PropriedadeListProps) {
 
   return (
     <div className="propriedades-list">
-      <div className="propriedades-list__toolbar">
+      <div className="propriedades-list__toolbar list-toolbar">
+        <div className="list-toolbar__leading">
         <p className="propriedades-list__count" aria-live="polite">
           {isLoading ? 'Carregando...' : error ? 'Listagem indisponível'
             : `${listagem.items.length} de ${listagem.total} registros`}
         </p>
+        <ListControls query={query} isLoading={isLoading}
+          onSearchChange={(search) => updateQuery({ search, page: 1 })} />
+        </div>
+        <ListPagination query={query} totalPages={listagem.totalPages} isLoading={isLoading} onPageChange={(page) => updateQuery({ page })} />
         <div className="propriedades-list__actions">
           <button className="propriedades-list__refresh" type="button"
             onClick={() => setReloadKey((value) => value + 1)} disabled={isLoading}>
@@ -88,13 +100,7 @@ export function PropriedadeList({ onAdd }: PropriedadeListProps) {
         <div className="propriedades-list__message">Nenhum registro encontrado.</div>
       ) : (
         <>
-          <PropriedadeTable items={listagem.items} onSave={handleSave} onDelete={handleDelete} />
-          {listagem.hasNextPage && (
-            <p className="propriedades-list__hint">
-              A API retornou apenas a primeira página. Existem mais registros;
-              os controles de paginação ainda serão implementados.
-            </p>
-          )}
+          <PropriedadeTable items={listagem.items} ordering={query.ordering} onSort={(field) => updateQuery({ ordering: query.ordering === field ? `-${field}` : field, page: 1 })} onSave={handleSave} onDelete={handleDelete} />
         </>
       )}
     </div>

@@ -15,4 +15,7 @@ export interface TipoListagem {
   items: Tipo[]
   total: number
   hasNextPage: boolean
+  hasPreviousPage: boolean
+  currentPage: number
+  totalPages: number
 }

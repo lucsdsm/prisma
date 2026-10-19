@@ -6,6 +6,7 @@
 }
 
 .tipos-list__toolbar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;

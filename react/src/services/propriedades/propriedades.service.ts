@@ -1,28 +1,15 @@
 import { apiFetch } from '../api'
 import type { Propriedade, PropriedadeInput, PropriedadeListagem } from '../../types/propriedades'
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
-
-export async function listarPropriedade(signal?: AbortSignal): Promise<PropriedadeListagem> {
+export async function listarPropriedade(query: ListQuery, signal?: AbortSignal): Promise<PropriedadeListagem> {
   const response = await apiFetch<Propriedade[] | PaginatedResponse<Propriedade>>(
-    '/propriedades/',
+    `/propriedades/${criarQueryString(query)}`,
     { method: 'GET', signal },
   )
 
-  if (Array.isArray(response)) {
-    return { items: response, total: response.length, hasNextPage: false }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export async function criarPropriedade(dados: PropriedadeInput): Promise<Propriedade> {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
+import { ListControls, ListPagination } from '../../ui/list-controls'
 
 import { FuncionarioTable } from '../table'
 
@@ -14,6 +15,7 @@ import type {
   FuncionarioInput,
   FuncionariosList,
 } from '../../../types/funcionario'
+import { INITIAL_LIST_QUERY, type ListQuery } from '../../../types/listagem'
 
 import './styles.css'
 
@@ -28,11 +30,15 @@ export function FuncionarioList({
     items: [],
     total: 0,
     hasNextPage: false,
+    hasPreviousPage: false,
+    currentPage: 1,
+    totalPages: 1,
   })
 
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState<ListQuery>(INITIAL_LIST_QUERY)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -42,7 +48,7 @@ export function FuncionarioList({
       setError('')
 
       try {
-        const data = await listarFuncionarios(controller.signal)
+        const data = await listarFuncionarios(query, controller.signal)
 
         if (!controller.signal.aborted) {
           setListagem(data)
@@ -65,7 +71,11 @@ export function FuncionarioList({
     void carregarFuncionarios()
 
     return () => controller.abort()
-  }, [reloadKey])
+  }, [reloadKey, query])
+
+  function updateQuery(changes: Partial<ListQuery>) {
+    setQuery((current) => ({ ...current, ...changes }))
+  }
 
   async function handleSave(
     id: number,
@@ -97,7 +107,8 @@ export function FuncionarioList({
 
   return (
     <div className="funcionarios-list">
-      <div className="funcionarios-list__toolbar">
+      <div className="funcionarios-list__toolbar list-toolbar">
+        <div className="list-toolbar__leading">
         <p className="funcionarios-list__count" aria-live="polite">
           {isLoading
             ? 'Carregando funcionários...'
@@ -106,6 +117,10 @@ export function FuncionarioList({
               : `${listagem.items.length} de ${listagem.total} funcionários`}
         </p>
 
+        <ListControls query={query} isLoading={isLoading}
+          onSearchChange={(search) => updateQuery({ search, page: 1 })} />
+        </div>
+        <ListPagination query={query} totalPages={listagem.totalPages} isLoading={isLoading} onPageChange={(page) => updateQuery({ page })} />
         <div className="funcionarios-list__actions">
           <button
             className="funcionarios-list__refresh"
@@ -146,18 +161,12 @@ export function FuncionarioList({
         </div>
       ) : (
         <>
-          <FuncionarioTable
+          <FuncionarioTable ordering={query.ordering} onSort={(field) => updateQuery({ ordering: query.ordering === field ? `-${field}` : field, page: 1 })}
             funcionarios={listagem.items}
             onSave={handleSave}
             onDelete={handleDelete}
           />
 
-          {listagem.hasNextPage && (
-            <p className="funcionarios-list__pagination-note">
-              A API retornou apenas a primeira página. Existem mais
-              funcionários; os controles de paginação ainda serão implementados.
-            </p>
-          )}
         </>
       )}
     </div>

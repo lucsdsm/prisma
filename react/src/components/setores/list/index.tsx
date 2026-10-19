@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
+import { ListControls, ListPagination } from '../../ui/list-controls'
 
 import { SetorTable } from '../table'
 
@@ -14,6 +15,7 @@ import type {
   SetorInput,
   SetoresList,
 } from '../../../types/setor'
+import { INITIAL_LIST_QUERY, type ListQuery } from '../../../types/listagem'
 
 import './styles.css'
 
@@ -26,11 +28,15 @@ export function SetorList({ onAdd }: SetorListProps) {
     items: [],
     total: 0,
     hasNextPage: false,
+    hasPreviousPage: false,
+    currentPage: 1,
+    totalPages: 1,
   })
 
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState<ListQuery>(INITIAL_LIST_QUERY)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -40,7 +46,7 @@ export function SetorList({ onAdd }: SetorListProps) {
       setError('')
 
       try {
-        const data = await listarSetores(controller.signal)
+        const data = await listarSetores(query, controller.signal)
 
         if (!controller.signal.aborted) {
           setListagem(data)
@@ -63,7 +69,11 @@ export function SetorList({ onAdd }: SetorListProps) {
     void carregarSetores()
 
     return () => controller.abort()
-  }, [reloadKey])
+  }, [reloadKey, query])
+
+  function updateQuery(changes: Partial<ListQuery>) {
+    setQuery((current) => ({ ...current, ...changes }))
+  }
 
   async function handleSave(
     id: number,
@@ -93,7 +103,8 @@ export function SetorList({ onAdd }: SetorListProps) {
 
   return (
     <div className="setores-list">
-      <div className="setores-list__toolbar">
+      <div className="setores-list__toolbar list-toolbar">
+        <div className="list-toolbar__leading">
         <p className="setores-list__count" aria-live="polite">
           {isLoading
             ? 'Carregando setores...'
@@ -102,6 +113,10 @@ export function SetorList({ onAdd }: SetorListProps) {
               : `${listagem.items.length} de ${listagem.total} setores`}
         </p>
 
+        <ListControls query={query} isLoading={isLoading}
+          onSearchChange={(search) => updateQuery({ search, page: 1 })} />
+        </div>
+        <ListPagination query={query} totalPages={listagem.totalPages} isLoading={isLoading} onPageChange={(page) => updateQuery({ page })} />
         <div className="setores-list__actions">
           <button
             className="setores-list__refresh"
@@ -142,18 +157,12 @@ export function SetorList({ onAdd }: SetorListProps) {
         </div>
       ) : (
         <>
-          <SetorTable
+          <SetorTable ordering={query.ordering} onSort={(field) => updateQuery({ ordering: query.ordering === field ? `-${field}` : field, page: 1 })}
             setores={listagem.items}
             onSave={handleSave}
             onDelete={handleDelete}
           />
 
-          {listagem.hasNextPage && (
-            <p className="setores-list__pagination-note">
-              A API retornou apenas a primeira página. Existem mais
-              setores; os controles de paginação ainda serão implementados.
-            </p>
-          )}
         </>
       )}
     </div>

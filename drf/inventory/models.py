@@ -108,7 +108,6 @@ class Equipamento(models.Model):
 
     tombo = models.CharField(
         max_length=100,
-        unique=True,
         null=True,
         blank=True,
         help_text="Número patrimonial.",

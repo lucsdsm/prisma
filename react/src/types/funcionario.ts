@@ -22,4 +22,7 @@ export interface FuncionariosList {
   items: Funcionario[]
   total: number
   hasNextPage: boolean
+  hasPreviousPage: boolean
+  currentPage: number
+  totalPages: number
 }

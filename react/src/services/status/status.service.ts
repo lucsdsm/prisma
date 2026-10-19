@@ -1,28 +1,15 @@
 import { apiFetch } from '../api'
 import type { Status, StatusInput, StatusListagem } from '../../types/status'
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
-
-export async function listarStatus(signal?: AbortSignal): Promise<StatusListagem> {
+export async function listarStatus(query: ListQuery, signal?: AbortSignal): Promise<StatusListagem> {
   const response = await apiFetch<Status[] | PaginatedResponse<Status>>(
-    '/status/',
+    `/status/${criarQueryString(query)}`,
     { method: 'GET', signal },
   )
 
-  if (Array.isArray(response)) {
-    return { items: response, total: response.length, hasNextPage: false }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export async function criarStatus(dados: StatusInput): Promise<Status> {

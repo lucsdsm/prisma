@@ -21,7 +21,7 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState(isAuthenticated)
 
   const [activeSection, setActiveSection] =
-    useState<SectionId>('equipamentos')
+    useState<SectionId>('dashboard')
 
   useEffect(() => {
     function handleSessionExpired() {
@@ -34,14 +34,14 @@ export default function App() {
   }, [])
 
   function handleLoginSuccess() {
-    setActiveSection('equipamentos')
+    setActiveSection('dashboard')
     setAuthenticated(true)
   }
 
   function handleLogout() {
     logout()
     setAuthenticated(false)
-    setActiveSection('equipamentos')
+    setActiveSection('dashboard')
   }
 
   if (!authenticated) {
@@ -61,13 +61,9 @@ export default function App() {
 
       <main className="app-main">
         <header className="app-main__header">
-          <p className="app-main__eyebrow">Prisma</p>
 
-          <h1>{currentSection.label}</h1>
+          <h1>{currentSection.label} </h1>
 
-          <p className="app-main__description">
-            {currentSection.description}
-          </p>
         </header>
 
         <section

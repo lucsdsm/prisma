@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
+import { ListControls, ListPagination } from '../../ui/list-controls'
 import { CargoTable } from '../table'
 import {
   listarCargo,
@@ -7,6 +8,7 @@ import {
   excluirCargo,
 } from '../../../services/cargos/cargos.service'
 import type { Cargo, CargoInput, CargoListagem } from '../../../types/cargos'
+import { INITIAL_LIST_QUERY, type ListQuery } from '../../../types/listagem'
 import './styles.css'
 
 interface CargoListProps {
@@ -15,11 +17,12 @@ interface CargoListProps {
 
 export function CargoList({ onAdd }: CargoListProps) {
   const [listagem, setListagem] = useState<CargoListagem>({
-    items: [], total: 0, hasNextPage: false,
+    items: [], total: 0, hasNextPage: false, hasPreviousPage: false, currentPage: 1, totalPages: 1,
   })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState<ListQuery>(INITIAL_LIST_QUERY)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -28,7 +31,7 @@ export function CargoList({ onAdd }: CargoListProps) {
       setIsLoading(true)
       setError('')
       try {
-        const data = await listarCargo(controller.signal)
+        const data = await listarCargo(query, controller.signal)
         if (!controller.signal.aborted) setListagem(data)
       } catch (err) {
         if (!controller.signal.aborted) {
@@ -41,7 +44,11 @@ export function CargoList({ onAdd }: CargoListProps) {
 
     void carregar()
     return () => controller.abort()
-  }, [reloadKey])
+  }, [reloadKey, query])
+
+  function updateQuery(changes: Partial<ListQuery>) {
+    setQuery((current) => ({ ...current, ...changes }))
+  }
 
   async function handleSave(id: number, dados: CargoInput): Promise<void> {
     const atualizado = await atualizarCargo(id, dados)
@@ -62,11 +69,16 @@ export function CargoList({ onAdd }: CargoListProps) {
 
   return (
     <div className="cargos-list">
-      <div className="cargos-list__toolbar">
+      <div className="cargos-list__toolbar list-toolbar">
+        <div className="list-toolbar__leading">
         <p className="cargos-list__count" aria-live="polite">
           {isLoading ? 'Carregando...' : error ? 'Listagem indisponível'
             : `${listagem.items.length} de ${listagem.total} registros`}
         </p>
+        <ListControls query={query} isLoading={isLoading}
+          onSearchChange={(search) => updateQuery({ search, page: 1 })} />
+        </div>
+        <ListPagination query={query} totalPages={listagem.totalPages} isLoading={isLoading} onPageChange={(page) => updateQuery({ page })} />
         <div className="cargos-list__actions">
           <button className="cargos-list__refresh" type="button"
             onClick={() => setReloadKey((value) => value + 1)} disabled={isLoading}>
@@ -88,13 +100,7 @@ export function CargoList({ onAdd }: CargoListProps) {
         <div className="cargos-list__message">Nenhum registro encontrado.</div>
       ) : (
         <>
-          <CargoTable items={listagem.items} onSave={handleSave} onDelete={handleDelete} />
-          {listagem.hasNextPage && (
-            <p className="cargos-list__hint">
-              A API retornou apenas a primeira página. Existem mais registros;
-              os controles de paginação ainda serão implementados.
-            </p>
-          )}
+          <CargoTable items={listagem.items} ordering={query.ordering} onSort={(field) => updateQuery({ ordering: query.ordering === field ? `-${field}` : field, page: 1 })} onSave={handleSave} onDelete={handleDelete} />
         </>
       )}
     </div>

@@ -1,0 +1,144 @@
+.list-controls {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.list-toolbar__leading {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.list-toolbar.list-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  justify-content: initial;
+}
+
+.list-toolbar.list-toolbar > .list-toolbar__leading {
+  grid-column: 1;
+}
+
+.list-toolbar.list-toolbar > .list-controls__pagination {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.list-toolbar.list-toolbar > div[class$='__actions'] {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.list-controls__search {
+  display: flex;
+  align-items: center;
+  width: min(22rem, 100%);
+  min-width: 12rem;
+  gap: 0.5rem;
+  min-height: 2.35rem;
+  border-radius: 0.25rem;
+  background-color: var(--color-surface-muted);
+  padding: 0 0.75rem;
+  color: var(--color-text-subtle);
+}
+
+.list-controls__search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.list-controls__pagination {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.list-controls__pagination button {
+  display: inline-grid;
+  min-width: 2.35rem;
+  min-height: 2.35rem;
+  place-items: center;
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.list-controls__column-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.list-controls__column-sort:disabled {
+  cursor: not-allowed;
+}
+
+.list-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* .list-controls button:focus-visible,
+.list-controls select:focus-visible,
+.list-controls input:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+} */
+
+.list-controls__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 40rem) {
+  .list-toolbar.list-toolbar {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .list-toolbar.list-toolbar > .list-controls__pagination,
+  .list-toolbar.list-toolbar > div[class$='__actions'] {
+    align-self: stretch;
+  }
+
+  .list-toolbar__leading {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .list-controls__search {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

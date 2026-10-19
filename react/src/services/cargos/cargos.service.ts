@@ -1,28 +1,15 @@
 import { apiFetch } from '../api'
 import type { Cargo, CargoInput, CargoListagem } from '../../types/cargos'
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
-
-export async function listarCargo(signal?: AbortSignal): Promise<CargoListagem> {
+export async function listarCargo(query: ListQuery, signal?: AbortSignal): Promise<CargoListagem> {
   const response = await apiFetch<Cargo[] | PaginatedResponse<Cargo>>(
-    '/cargos/',
+    `/cargos/${criarQueryString(query)}`,
     { method: 'GET', signal },
   )
 
-  if (Array.isArray(response)) {
-    return { items: response, total: response.length, hasNextPage: false }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export async function criarCargo(dados: CargoInput): Promise<Cargo> {

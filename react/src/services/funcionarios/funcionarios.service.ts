@@ -5,37 +5,21 @@ import type {
   FuncionarioInput,
   FuncionariosList,
 } from '../../types/funcionario'
-
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
+import { criarQueryString, normalizarListagem } from '../listagem'
+import type { ListQuery, PaginatedResponse } from '../../types/listagem'
 
 export async function listarFuncionarios(
+  query: ListQuery,
   signal?: AbortSignal,
 ): Promise<FuncionariosList> {
   const response = await apiFetch<
     Funcionario[] | PaginatedResponse<Funcionario>
-  >('/funcionarios/', {
+  >(`/funcionarios/${criarQueryString(query)}`, {
     method: 'GET',
     signal,
   })
 
-  if (Array.isArray(response)) {
-    return {
-      items: response,
-      total: response.length,
-      hasNextPage: false,
-    }
-  }
-
-  return {
-    items: response.results,
-    total: response.count,
-    hasNextPage: response.next !== null,
-  }
+  return normalizarListagem(response, query.page)
 }
 
 export async function criarFuncionario(

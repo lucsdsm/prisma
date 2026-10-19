@@ -13,11 +13,14 @@ import {
 } from '../../../services/equipamentos/equipamentos-options.service'
 
 import { Select, type SelectOption } from '../../ui/select'
+import { SortableColumn } from '../../ui/list-controls'
 
 import './styles.css'
 
 interface EquipamentoTableProps {
   equipamentos: Equipamento[]
+  ordering: string
+  onSort: (field: string) => void
   onSave: (
     id: number,
     dados: EquipamentoInlineUpdate,
@@ -61,6 +64,8 @@ function includeCurrentOption(
 
 export function EquipamentoTable({
   equipamentos,
+  ordering,
+  onSort,
   onSave,
   onDelete,
 }: EquipamentoTableProps) {
@@ -254,13 +259,13 @@ export function EquipamentoTable({
 
           <thead>
             <tr>
-              <th scope="col">Tombo</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Marca / modelo</th>
-              <th scope="col">Propriedade</th>
-              <th scope="col">Responsável</th>
-              <th scope="col">Setor</th>
-              <th scope="col">Status</th>
+              <th scope="col"><SortableColumn field="tombo" label="Tombo" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="tipo__nome" label="Tipo" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="marca" label="Marca / modelo" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="propriedade__nome" label="Propriedade" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="responsavel_atual__nome" label="Responsável" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="responsavel_atual__setor__nome" label="Setor" ordering={ordering} onSort={onSort} /></th>
+              <th scope="col"><SortableColumn field="status__nome" label="Status" ordering={ordering} onSort={onSort} /></th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
@@ -377,7 +382,7 @@ export function EquipamentoTable({
                         <span>{equipamento.marca}</span>
 
                         <span className="equipamento-table__secondary">
-                          {equipamento.modelo || 'Modelo não informado'}
+                          {equipamento.modelo}
                         </span>
                       </div>
                     )}
@@ -491,7 +496,6 @@ export function EquipamentoTable({
                             }
                           >
                             <Check size={16} aria-hidden="true" />
-                            {isThisRowPending ? 'Salvando...' : 'Salvar'}
                           </button>
 
                           <button
@@ -501,7 +505,6 @@ export function EquipamentoTable({
                             onClick={cancelEditing}
                           >
                             <X size={16} aria-hidden="true" />
-                            Cancelar
                           </button>
                         </>
                       ) : (
@@ -515,7 +518,6 @@ export function EquipamentoTable({
                             }
                           >
                             <Pencil size={16} aria-hidden="true" />
-                            {isThisRowLoading ? 'Carregando...' : 'Editar'}
                           </button>
 
                           <button
